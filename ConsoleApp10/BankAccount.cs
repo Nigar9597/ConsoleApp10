@@ -11,62 +11,69 @@ namespace ConsoleApp10
 {
     class BankAccount
     {
-        private decimal balance;
-        public decimal Balance { get; }
-        public string AccountNumber { get; }
-        public string OwnerName { get; set; }
-
-        public BankAccount(decimal balans)
+        private decimal _balance;
+        public decimal Balance
         {
-            
+            get { return _balance; }
         }
+        private int _accountnumber;
+
+        public int AccountNumber
+        {
+            get { return _accountnumber; }
+        }
+
+        public string OwnerName { get; set; }
+        public BankAccount(decimal balance, int accountnumber, string ownerName)
+        {
+            if (balance >= 0)
+                _balance = balance;
+            _accountnumber = accountnumber;
+            OwnerName = ownerName;
+        }
+
         public void Deposit(decimal amount)
-        {if(amount<=0)
+        {
+            if (amount <= 0)
             {
                 Console.WriteLine("mebleg musbet olmalidir");
             }
-            else if(amount>=0)
+            else
             {
-                balance += amount;
+                _balance += amount;
                 Console.WriteLine("hesaba mebleg elave edildi");
             }
-
-            
-
         }
-         public void WithDraw(decimal amount)
+        public void WithDraw(decimal amount)
         {
-            if(amount<=0)
+            if (amount <= 0)
             {
-                Console.WriteLine( "cixarilan mebleg musbet olmalidir");
-                       
-             }
-            else if(amount>balance)
+                Console.WriteLine("cixarilan mebleg musbet olmalidir");
+            }
+            else if (amount > _balance)
             {
                 Console.WriteLine("balansda kifayet qeder mebleg yoxdur");
             }
-
             else
             {
-                balance -= amount;
-                Console.WriteLine($"{amount} cixarildi, cari balans: {balance}");
+                _balance -= amount;
+                Console.WriteLine($"{amount} cixarildi, cari balans: {_balance}");
             }
-        }  
-       
+        }
+
         public void DisplayAcoountInfo()
         {
             Console.WriteLine($"account number:{AccountNumber}");
             Console.WriteLine($"owner name: {OwnerName}");
-            Console.WriteLine($"balance:{balance}");
+            Console.WriteLine($"balance:{_balance}");
         }
 
         public void TransferFunds(BankAccount recipient, decimal amount)
-
         {
-            if (amount > 0 && amount <= balance)
+            if (amount > 0 && amount <= Balance)
             {
-                balance -= amount;
-                recipient.balance+=amount;
+                WithDraw(amount);
+                recipient.Deposit(amount);
                 Console.WriteLine($"{amount} AZN kocuruldu {recipient.OwnerName}.");
             }
             else
